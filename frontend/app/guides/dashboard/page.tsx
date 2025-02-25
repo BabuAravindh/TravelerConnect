@@ -9,6 +9,7 @@ import {
   LineChart, Line
 } from "recharts";
 import Sidebar from "@/components/SideBar";
+import UserSidebar from "@/components/UserSidebar";
 
 const MapChart = dynamic(() => import("@/components/MapChart"), { ssr: false });
 
@@ -25,7 +26,7 @@ const GuideDashboard = ({ children }: { children: React.ReactNode }) => {
     }
   }, []);
 
-  if (!role) return <p>Loading...</p>;
+  
   const pathname = usePathname();
   const isOverviewPage = pathname === "/guides/dashboard";
 
@@ -47,7 +48,7 @@ const GuideDashboard = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div className="flex min-h-screen bg-gray-100">
-      <Sidebar />
+      <UserSidebar/>
       <main className="flex-1 p-6">
         <div className="max-w-6xl mx-auto bg-white shadow-lg rounded-xl p-6">
           <h1 className="text-2xl font-semibold text-center mb-6">📊 Guide Dashboard</h1>
