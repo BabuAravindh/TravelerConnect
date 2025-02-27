@@ -1,33 +1,32 @@
-"use client"
-import ChatUI from '@/components/DesktopChat'
-import ChatApp from '@/components/MobileChat'
-import UserSidebar from '@/components/UserSidebar'
-import React from 'react'
-import { useEffect, useState } from 'react'
+'use client';
 
-const Page = () => {
-  const [isMobile, setIsMobile] = useState(false);
+import { useState } from 'react';
+import GuideDashboard from '../page';
+import ChatList from '@/components/ChatList';
+import Chat from '@/components/MobileChat';
 
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+const MessagesPage = () => {
+  const [selectedUser, setSelectedUser] = useState(null);
 
   return (
-    <div className='flex flex-row h-screen '>
-      <div className='w-1/40 h-full'>
-        <UserSidebar/>
-      </div>
-      <div className='flex-1 h-full'>
-        {isMobile ? <ChatApp /> : <ChatUI />}   
-      </div>
-    </div>
-  );
-}
+    <GuideDashboard>
+      <div className="flex flex-col md:flex-row gap-4 min-h-screen md:h-[600px] p-4">
+        {/* Chat List - Hidden on mobile when a user is selected */}
+        <div className={`w-full md:w-1/3 rounded-xl shadow-md overflow-hidden transition-all duration-300 ${selectedUser ? 'hidden md:block' : ''}`}>
+          <ChatList onSelectUser={setSelectedUser} />
+        </div>
 
-export default Page;
+        {/* Chat View - Hidden on mobile unless a user is selected */}
+        <div className={`w-full md:w-2/3 bg-white p-4 rounded-xl shadow-md flex flex-col overflow-hidden transition-all duration-300 ${!selectedUser ? 'hidden md:flex' : ''}`}>
+          {selectedUser ? (
+            <Chat user={selectedUser} onBack={() => setSelectedUser(null)} />
+          ) : (
+            <p className="text-center text-gray-500">Select a conversation</p>
+          )}
+        </div>
+      </div>
+    </GuideDashboard>
+  );
+};
+
+export default MessagesPage;
